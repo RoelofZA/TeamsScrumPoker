@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "TeamsScrumPoker"
+    }
+  },
+  "defaultProject": "TeamsScrumPoker",
+  "cli": {
+    "analytics": false
+  }
 }
