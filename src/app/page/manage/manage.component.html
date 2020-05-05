@@ -1,1 +1,37 @@
-<p>manage works!</p>
+<h5 class="card-title">Manage Team Game</h5>
+<p class="card-text">Pick your desired team name, and manage the voting.</p>
+
+{{sessionMessage}}
+
+<form [formGroup]="manageForm" (ngSubmit)="onSubmit()">
+  
+    <div class="form-group">
+        <label for="labelPlayerName">Player Name</label>
+        <input type="text" class="form-control" id="playerName" formControlName="playerName" placeholder="Joe Denver" [class.ng-invalid]="playerName.invalid && (playerName.dirty || playerName.touched)">
+        <div *ngIf="playerName.invalid && (playerName.dirty || playerName.touched)"
+            class="alert alert-danger">
+            <div *ngIf="playerName.errors.required">
+                Name is required.
+            </div>
+            <div *ngIf="playerName.errors.minlength">
+                Name must be at least 3 characters long.
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="labelTeamName">Team Name</label>
+        <input type="text" class="form-control" id="inputTeamName" formControlName="teamName" placeholder="Springboks">
+        <div *ngIf="teamName.invalid && (teamName.dirty || teamName.touched)"
+            class="alert alert-danger">
+            <div *ngIf="teamName.errors.required">
+                Team Name is required.
+            </div>
+            <div *ngIf="teamName.errors.minlength">
+                Team Name must be at least 3 characters long.
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="!manageForm.valid" id="buttonSubmit">Update Details</button> &nbsp;
+    <button id="clearPlayerVotes" (click)="clearVotes()" class="btn btn-danger">Clear Player Votes</button>
+  </form>

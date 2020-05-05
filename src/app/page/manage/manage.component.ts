@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { ScrumTeamsService } from 'src/app/service/scrum-teams.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-manage',
@@ -6,10 +8,50 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./manage.component.css']
 })
 export class ManageComponent implements OnInit {
+  manageForm = new FormGroup(
+    {
+      playerName: new FormControl(this.scrumTeams.playerInfo.name, [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(50)]),
+      teamName: new FormControl(this.scrumTeams.playerInfo.team, [
+        Validators.required,
+        Validators.minLength(3), 
+        Validators.maxLength(50)])
+    }
+  );
+  sessionMessage: string;
+  
+  constructor(private scrumTeams: ScrumTeamsService) { }
 
-  constructor() { }
+  get playerName() {
+    return this.manageForm.get('playerName');
+  }
+
+  get teamName() {
+    return this.manageForm.get('teamName');
+  }
 
   ngOnInit(): void {
+    console.warn(sessionStorage.getItem('sessionId'));
+    console.log(window.name);
+    if (sessionStorage.getItem('sessionId') === null) {
+      sessionStorage['sessionId'] = this.scrumTeams.sessionId;
+      this.sessionMessage = "New Session";
+    }
+    else
+    {
+      this.sessionMessage = "Valid Session";
+    }
+  }
+
+  clearVotes() {
+    this.scrumTeams.clearVotes();
+  }
+
+  onSubmit() {
+    console.warn(this.manageForm.value);
+    this.scrumTeams.updatePlayer(this.manageForm.get('playerName').value, this.manageForm.get('teamName').value);
   }
 
 }

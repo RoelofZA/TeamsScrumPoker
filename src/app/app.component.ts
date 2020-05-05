@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ScrumGame } from './interface/scrum-game';
 import { ScrumTeamsService } from './service/scrum-teams.service';
+import { PlayerInfo } from './interface/player-info';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ManageComponent } from './page/manage/manage.component';
+import { DuplicateTabComponent } from './page/duplicate-tab/duplicate-tab.component';
 
 @Component({
   selector: 'app-root',
@@ -9,10 +13,32 @@ import { ScrumTeamsService } from './service/scrum-teams.service';
 })
 export class AppComponent implements OnInit {
   title = 'TeamsScrumPoker';
-  game: ScrumGame;
-  constructor(private scrumTeam: ScrumTeamsService) {}
+  game: any;
+  votes: any;
+  playerInfo: PlayerInfo;
+  constructor(private scrumTeam: ScrumTeamsService,
+              private route: ActivatedRoute,
+              private router: Router) {
+    this.scrumTeam.getPlayerInfo();
+  }
 
   ngOnInit() {
-    this.game = { TeamName: 'MockData', sessionId: 'mockSession', votes: [ { name: '1mockPlayer', vote: 8}, { name: 'mockPlayer2', vote: 13}] };
+    if (this.playerInfo?.name === '') {
+      this.router.navigate(['manage'], { relativeTo: this.route });
+    }
+    this.scrumTeam.game.subscribe(xy => this.game = xy);
+    this.getVotes();
+  }
+
+  getVotes() {
+    return this.scrumTeam.getVotes().subscribe(votes => this.votes = votes);
+  }
+
+  validateTab() {
+    if ((sessionStorage.getItem('sessionId') !== null && sessionStorage.getItem('sessionId') !== this.scrumTeam.sessionId)) {
+      //this.router.navigate(['duplicate']);
+      return false;
+    }
+    return true;
   }
 }
