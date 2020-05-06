@@ -36,7 +36,6 @@ export class AppComponent implements OnInit {
 
   validateTab() {
     if ((sessionStorage.getItem('sessionId') !== null && sessionStorage.getItem('sessionId') !== this.scrumTeam.sessionId)) {
-      //this.router.navigate(['duplicate']);
       return false;
     }
     return true;
