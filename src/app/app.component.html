@@ -11,7 +11,7 @@
       <br/>
       <router-outlet></router-outlet>
       <p>&nbsp;</p>
-      <ul class="list-group" *ngIf="votes.length>0">
+      <ul class="list-group" *ngIf="votes != null  && votes.length>0">
         <li class="list-group-item list-group-item-primary">Votes Cast</li>
         <li class="list-group-item" *ngFor="let item of votes">{{item.name}} - {{item.vote}}</li>
       </ul>

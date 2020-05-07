@@ -19,19 +19,24 @@ export class AppComponent implements OnInit {
   constructor(private scrumTeam: ScrumTeamsService,
               private route: ActivatedRoute,
               private router: Router) {
-    this.scrumTeam.getPlayerInfo();
+    this.playerInfo = this.scrumTeam.getPlayerInfo();
   }
 
   ngOnInit() {
     if (this.playerInfo?.name === '') {
       this.router.navigate(['manage'], { relativeTo: this.route });
     }
-    this.scrumTeam.game.subscribe(xy => this.game = xy);
+    this.scrumTeam.getGame().subscribe(xy => {
+      this.game = xy;
+    });
     this.getVotes();
   }
 
   getVotes() {
-    return this.scrumTeam.getVotes().subscribe(votes => this.votes = votes);
+    return this.scrumTeam.getVotes().subscribe(votes => { 
+      this.votes = votes;
+      this.playerInfo = this.scrumTeam.playerInfo;
+    });
   }
 
   validateTab() {

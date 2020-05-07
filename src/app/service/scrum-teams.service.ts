@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Output, EventEmitter } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { ScrumGame } from '../interface/scrum-game';
 import { PlayerVote } from '../interface/player-vote';
 import { PlayerInfo } from '../interface/player-info';
@@ -9,10 +9,11 @@ import { PlayerInfo } from '../interface/player-info';
   providedIn: 'root'
 })
 export class ScrumTeamsService {
-  game: Observable<any>;
   votes: Observable<any>;
+  voteObj; any;
   playerInfo: PlayerInfo;
   sessionId: string;
+
   constructor(private firestore: AngularFirestore) {
     const localVal = localStorage.getItem('PlayerInfo');
     if (localVal === null) {
@@ -21,8 +22,8 @@ export class ScrumTeamsService {
     else {
       this.playerInfo = JSON.parse(localStorage.getItem('PlayerInfo'));
     }
-    this.game = firestore.doc<ScrumGame>('scrumgames/' + this.playerInfo.team).valueChanges();
-    
+
+    // sessionId
     if (window?.name !== '') {
       this.sessionId = window.name;
     }
@@ -34,10 +35,15 @@ export class ScrumTeamsService {
     {
       window.name = this.sessionId;
     }
+    this.voteObj = this.firestore.doc<PlayerVote>('scrumgames/' + this.playerInfo.team).collection('votes');
    }
 
+  getGame() {
+    return this.firestore.doc<ScrumGame>('scrumgames/' + this.playerInfo.team).valueChanges();
+  }
+
   getVotes() {
-    return this.firestore.doc<PlayerVote>('scrumgames/' + this.playerInfo.team).collection('votes').valueChanges();
+    return this.voteObj.valueChanges();
   }
 
   clearVotes() {

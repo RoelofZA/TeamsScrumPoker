@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ScrumTeamsService } from 'src/app/service/scrum-teams.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -37,11 +37,6 @@ export class ManageComponent implements OnInit {
     console.log(window.name);
     if (sessionStorage.getItem('sessionId') === null) {
       sessionStorage['sessionId'] = this.scrumTeams.sessionId;
-      this.sessionMessage = "New Session";
-    }
-    else
-    {
-      this.sessionMessage = "Valid Session";
     }
   }
 
@@ -50,7 +45,6 @@ export class ManageComponent implements OnInit {
   }
 
   onSubmit() {
-    console.warn(this.manageForm.value);
     this.scrumTeams.updatePlayer(this.manageForm.get('playerName').value, this.manageForm.get('teamName').value);
   }
 
