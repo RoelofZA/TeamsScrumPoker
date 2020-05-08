@@ -57,6 +57,7 @@ export class ScrumTeamsService {
     this.playerInfo.team = team;
     localStorage.setItem('PlayerInfo', JSON.stringify(this.playerInfo));
     this.firestore.doc('scrumgames/' + this.playerInfo.team).set({team});
+    window.location.reload();
   }
 
   getPlayerInfo() {

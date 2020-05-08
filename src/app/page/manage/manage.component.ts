@@ -41,10 +41,12 @@ export class ManageComponent implements OnInit {
   }
 
   clearVotes() {
+    console.log('clearVotes');
     this.scrumTeams.clearVotes();
   }
 
   onSubmit() {
+    console.log('onSubmit');
     this.scrumTeams.updatePlayer(this.manageForm.get('playerName').value, this.manageForm.get('teamName').value);
   }
 
